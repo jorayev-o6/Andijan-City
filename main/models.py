@@ -72,12 +72,6 @@ class BannerDiscount(models.Model):
     discount = models.IntegerField(default=0)
 
 
-class Contact(models.Model):
-    background = models.ImageField(upload_to='contact-us-background')
-    title = models.CharField(max_length=75)
-    description = models.CharField(max_length=150)
-
-
 class Info(models.Model):
     background = models.ImageField(upload_to='info-background')
     title = models.CharField(max_length=255)
@@ -88,6 +82,19 @@ class ContactUs(models.Model):
     name = models.CharField(max_length=100)
     number = models.CharField(max_length=25)
     email = models.EmailField()
+
+    def __str__(self):
+        return self.name
+
+
+class Contact(models.Model):
+    background = models.ImageField(upload_to='contact-us-background')
+    title = models.CharField(max_length=75)
+    description = models.CharField(max_length=150)
+    contact = models.ForeignKey(ContactUs, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.title
 
 
 class Footer(models.Model):
@@ -115,10 +122,21 @@ class User(models.Model):
     last_name = models.CharField(max_length=255)
     profile_photo = models.ImageField(upload_to='profile-photo')
 
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
+
 
 class Realtor(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     rating = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f'{self.user}'
+
+
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    comment = models.TextField()
 
 
 class Work(models.Model):
